@@ -21,7 +21,9 @@ v2_1 = ["ceres-solver-sys/v2_1"]
 system = ["ceres-solver-sys/system"]
 # "source" overrides "system"
 source = ["ceres-solver-sys/source"]
-default = ["system"]
+# "custom" overrides "system"
+custom = ["ceres-solver-sys/custom"]
+default = ["custom"]
 
 [dependencies.ceres-solver-sys]
 version = "0.2.1"

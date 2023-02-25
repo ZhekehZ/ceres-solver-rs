@@ -14,6 +14,8 @@ v2_1 = []
 system = ["pkg-config"]
 # "source" overrides "system"
 source = ["ceres-solver-src", "v2_1"]
+# "custom" overrides "system"
+custom = []
 default = ["system"]
 
 [dependencies.ceres-solver-src]
