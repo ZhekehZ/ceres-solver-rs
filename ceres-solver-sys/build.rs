@@ -51,7 +51,7 @@ fn main() {
     #[cfg(feature = "custom")]
     {
         if let Ok(include_dirs) = std::env::var("CERES_RS_INCLUDE_DIRS") {
-            cc_build.includes(include_dirs..split(','));
+            cc_build.includes(include_dirs.split(','));
         }
     }
 
@@ -59,7 +59,7 @@ fn main() {
     #[cfg(feature = "custom")]
     {
         if let Ok(defines) = std::env::var("CERES_RS_DEFINES") {
-            for define in defines..split(',') {
+            for define in defines.split(',') {
                 if let Some((key, value)) = define.split_once('=') {
                     cc_build.define(key, value);
                 }
