@@ -457,13 +457,17 @@ impl SolverSummary {
     }
 
     pub fn brief_report(&self) -> String {
-        self.inner().brief_report()
-            .to_str().unwrap_or("Error: Invalid report string").to_string()
+        let report = self.inner().brief_report();
+        let string = report.to_str().unwrap_or("Error: Invalid report string").to_string();
+        drop(report);
+        string
     }
 
     pub fn full_report(&self) -> String {
-        self.inner().full_report()
-            .to_str().unwrap_or("Error: Invalid report string").to_string()
+        let report = self.inner().full_report();
+        let string = report.to_str().unwrap_or("Error: Invalid report string").to_string();
+        drop(report);
+        string
     }
 
     #[inline]
