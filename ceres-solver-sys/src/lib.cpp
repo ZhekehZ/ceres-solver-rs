@@ -234,7 +234,6 @@ namespace ceres {
         return std::make_unique<std::string>(inner.BriefReport());
     }
     std::unique_ptr<std::string> SolverSummary::full_report() const {
-        std::cerr << ">>>>>>" << inner.FullReport() << "<<<<<<" << std::endl;
         return std::make_unique<std::string>(inner.FullReport());
     }
     bool SolverSummary::is_solution_usable() const {

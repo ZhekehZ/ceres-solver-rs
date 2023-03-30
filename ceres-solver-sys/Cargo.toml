@@ -25,7 +25,7 @@ optional = true
 
 [dependencies.cxx]
 version = "1,<1.0.87"  # 1.0.87 requires MSRV 1.60
-features = ["c++14"]
+features = ["c++14", "alloc"]
 
 [build-dependencies]
 cmake = "0.1"
