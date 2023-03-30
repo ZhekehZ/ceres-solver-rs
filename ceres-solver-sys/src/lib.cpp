@@ -7,6 +7,8 @@
 #include "ceres-solver-sys/src/lib.h"
 #include "ceres-solver-sys/src/lib.rs.h"
 
+#include <iostream>
+
 namespace ceres {
     CallbackCostFunction::CallbackCostFunction(rust::Box<RustCostFunction> inner,
                                                int num_residuals,
@@ -232,6 +234,7 @@ namespace ceres {
         return std::make_unique<std::string>(inner.BriefReport());
     }
     std::unique_ptr<std::string> SolverSummary::full_report() const {
+        std::cerr << ">>>>>>" << inner.FullReport() << "<<<<<<" << std::endl;
         return std::make_unique<std::string>(inner.FullReport());
     }
     bool SolverSummary::is_solution_usable() const {
