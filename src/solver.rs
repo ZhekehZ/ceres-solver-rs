@@ -457,11 +457,13 @@ impl SolverSummary {
     }
 
     pub fn brief_report(&self) -> String {
-        self.inner().brief_report().to_string_lossy().into()
+        self.inner().brief_report()
+            .to_str().unwrap_or("Error: Invalid report string").to_string()
     }
 
     pub fn full_report(&self) -> String {
-        self.inner().full_report().to_string_lossy().into()
+        self.inner().full_report()
+            .to_str().unwrap_or("Error: Invalid report string").to_string()
     }
 
     #[inline]
