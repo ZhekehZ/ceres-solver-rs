@@ -2,9 +2,10 @@
 
 use crate::error::SolverOptionsBuildingError;
 use crate::residual_block::ResidualBlockId;
+use crate::iteration_callback::IterationCallback;
 
 use ceres_solver_sys::cxx::{let_cxx_string, UniquePtr};
-use ceres_solver_sys::ffi;
+use ceres_solver_sys::{ffi, RustIterationCallback};
 pub use ceres_solver_sys::ffi::{
     DenseLinearAlgebraLibraryType, DoglegType, DumpFormatType, LineSearchDirectionType,
     LineSearchInterpolationType, LineSearchType, LinearSolverType, LoggingType, MinimizerType,
@@ -433,6 +434,13 @@ impl SolverOptionsBuilder {
     #[inline]
     pub fn update_state_every_iteration(mut self, yes: bool) -> Self {
         self.inner_mut().set_update_state_every_iteration(yes);
+        self
+    }
+
+    #[inline]
+    pub fn add_iteration_callback(mut self, callback: impl IterationCallback) -> Self {
+        let rust_iter_cb = RustIterationCallback(Box::new(move |s| callback.invoke(s)));
+        self.inner_mut().add_iteration_callback(Box::new(rust_iter_cb));
         self
     }
 }

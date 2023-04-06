@@ -47,8 +47,16 @@ namespace ceres {
                                                         double* const* const parameter_blocks,
                                                         int num_parameter_blocks);
 
+    struct RustIterationCallback;
+    struct CustomIterationCallback: public IterationCallback {
+        rust::Box<RustIterationCallback> inner;
+        CustomIterationCallback(rust::Box<RustIterationCallback> inner);
+        virtual CallbackReturnType operator()(const IterationSummary& summary) override;
+    };
+
     struct SolverOptions {
         Solver::Options inner;
+        std::vector<CustomIterationCallback> callbacks;
         SolverOptions();
         bool is_valid(std::string& error) const;
         void set_minimizer_type(MinimizerType minimizer_type);
@@ -98,6 +106,7 @@ namespace ceres {
         void set_gradient_check_relative_precision(double relative_precision);
         void set_gradient_check_numeric_derivative_relative_step_size(double relative_step_size);
         void set_update_state_every_iteration(bool yes);
+        void add_iteration_callback(rust::Box<RustIterationCallback> callback);
         // Callbacks are skipped for now.
     };
     std::unique_ptr<SolverOptions> new_solver_options();

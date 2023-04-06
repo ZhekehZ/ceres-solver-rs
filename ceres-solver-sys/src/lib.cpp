@@ -74,7 +74,9 @@ namespace ceres {
     }
 
     SolverOptions::SolverOptions():
-        inner(Solver::Options()) {}
+        inner(Solver::Options()),
+        callbacks()
+    {}
     bool SolverOptions::is_valid(std::string& error) const {
         return inner.IsValid(&error);
     }
@@ -221,6 +223,41 @@ namespace ceres {
     }
     void SolverOptions::set_update_state_every_iteration(bool yes) {
         inner.update_state_every_iteration = yes;
+    }
+    void SolverOptions::add_iteration_callback(rust::Box<RustIterationCallback> callback) {
+        callbacks.push_back(CustomIterationCallback(std::move(callback)));
+        inner.callbacks.push_back(&callbacks.back());
+    }
+    CustomIterationCallback::CustomIterationCallback(rust::Box<RustIterationCallback> inner):
+        inner(std::move(inner)) {}
+    CallbackReturnType CustomIterationCallback::operator()(const IterationSummary& summary) {
+        RustIterationSummary const rust_summary{
+            static_cast<size_t>(summary.iteration),
+            summary.step_is_valid,
+            summary.step_is_nonmonotonic,
+            summary.step_is_successful,
+            summary.cost,
+            summary.cost_change,
+            summary.gradient_max_norm,
+            summary.gradient_norm,
+            summary.step_norm,
+            summary.relative_decrease,
+            summary.trust_region_radius,
+            summary.eta,
+            summary.step_size,
+            static_cast<size_t>(summary.line_search_function_evaluations),
+            static_cast<size_t>(summary.line_search_gradient_evaluations),
+            static_cast<size_t>(summary.line_search_iterations),
+            static_cast<size_t>(summary.linear_solver_iterations),
+            summary.iteration_time_in_seconds,
+            summary.step_solver_time_in_seconds,
+            summary.cumulative_time_in_seconds,
+        };
+        switch (inner->invoke(rust_summary)) {
+            case RustCallbackReturnType::SOLVER_CONTINUE: return SOLVER_CONTINUE;
+            case RustCallbackReturnType::SOLVER_ABORT: return SOLVER_ABORT;
+            default: return SOLVER_TERMINATE_SUCCESSFULLY;
+        }
     }
     std::unique_ptr<SolverOptions> new_solver_options() {
         return std::make_unique<SolverOptions>();

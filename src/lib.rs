@@ -141,3 +141,4 @@ pub mod parameter_block;
 pub mod residual_block;
 pub mod solver;
 pub mod types;
+pub mod iteration_callback;
