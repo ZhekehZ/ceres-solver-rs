@@ -457,7 +457,7 @@ impl From<Box<dyn Fn(f64, *mut f64)>> for RustLossFunction {
 }
 
 pub struct RustIterationCallback<'cb>(
-    pub Box<dyn Fn(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>
+    pub Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>
 );
 
 impl <'cb> RustIterationCallback<'cb> {
@@ -466,9 +466,9 @@ impl <'cb> RustIterationCallback<'cb> {
     }
 }
 
-impl <'cb> From<Box<dyn Fn(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>>
+impl <'cb> From<Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>>
 for RustIterationCallback<'cb> {
-    fn from(value: Box<dyn Fn(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>) -> Self {
+    fn from(value: Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>) -> Self {
         Self(value)
     }
 }

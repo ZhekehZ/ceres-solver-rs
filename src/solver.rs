@@ -438,9 +438,9 @@ impl SolverOptionsBuilder {
     }
 
     #[inline]
-    pub fn add_iteration_callback(mut self, callback: impl IterationCallback) -> Self {
-        let rust_iter_cb = RustIterationCallback(Box::new(move |s| callback.invoke(s)));
-        self.inner_mut().add_iteration_callback(Box::new(rust_iter_cb));
+    pub fn add_iteration_callback(mut self, mut callback: impl IterationCallback) -> Self {
+        let mut_cb = |s| callback.invoke(s);
+        self.inner_mut().add_iteration_callback(Box::new(RustIterationCallback(Box::new(mut_cb))));
         self
     }
 }

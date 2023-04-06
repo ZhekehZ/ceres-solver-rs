@@ -4,5 +4,5 @@ pub use ceres_solver_sys::ffi::{
 };
 
 pub trait IterationCallback {
-    fn invoke(&self, summary: IterationSummary) -> CallbackReturnType;
+    fn invoke(&mut self, summary: IterationSummary) -> CallbackReturnType;
 }
