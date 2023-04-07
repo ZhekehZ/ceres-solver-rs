@@ -1,4 +1,11 @@
 //! Various helper types.
+use ceres_solver_sys::ffi::{
+    RustIterationSummary,
+    RustCallbackReturnType,
+};
+
+pub type IterationSummary = RustIterationSummary;
+pub type CallbackReturnType = RustCallbackReturnType;
 
 pub type JacobianType<'a> = Option<&'a mut [Option<&'a mut [&'a mut [f64]]>]>;
 

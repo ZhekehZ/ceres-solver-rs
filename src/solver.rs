@@ -2,7 +2,6 @@
 
 use crate::error::SolverOptionsBuildingError;
 use crate::residual_block::ResidualBlockId;
-use crate::iteration_callback::IterationCallback;
 
 use ceres_solver_sys::cxx::{let_cxx_string, UniquePtr};
 use ceres_solver_sys::{ffi, RustIterationCallback};
@@ -16,6 +15,7 @@ use std::borrow::Cow;
 use std::ffi::OsStr;
 use std::path::Path;
 use std::pin::Pin;
+use crate::types::{CallbackReturnType, IterationSummary};
 
 pub struct SolverOptions(pub(crate) UniquePtr<ffi::SolverOptions>);
 
@@ -438,9 +438,12 @@ impl SolverOptionsBuilder {
     }
 
     #[inline]
-    pub fn add_iteration_callback(mut self, mut callback: impl IterationCallback) -> Self {
-        let mut_cb = |s| callback.invoke(s);
-        self.inner_mut().add_iteration_callback(Box::new(RustIterationCallback(Box::new(mut_cb))));
+    pub fn add_iteration_callback(
+        mut self,
+        callback: impl FnMut(IterationSummary) -> CallbackReturnType,
+    ) -> Self {
+        let rust_cb = RustIterationCallback(Box::new(callback));
+        self.inner_mut().add_iteration_callback(Box::new(rust_cb));
         self
     }
 }
