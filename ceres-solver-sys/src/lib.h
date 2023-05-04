@@ -91,6 +91,8 @@ namespace ceres {
         void set_gradient_tolerance(double gradient_tolerance);
         void set_parameter_tolerance(double parameter_tolerance);
         void set_linear_solver_type(LinearSolverType linear_solver_type);
+        void use_inner_iterations(bool value);
+        void set_inner_iteration_tolerance(double tolerance);
         void set_preconditioner_type(PreconditionerType preconditioner_type);
         void set_visibility_clustering_type(VisibilityClusteringType visibility_clustering_type);
         void set_residual_blocks_for_subset_preconditioner(rust::Slice<const std::shared_ptr<ResidualBlockId>> residual_blocks);

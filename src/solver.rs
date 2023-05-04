@@ -299,6 +299,18 @@ impl SolverOptionsBuilder {
     }
 
     #[inline]
+    pub fn use_inner_iterations(mut self, value: bool) -> Self {
+        self.inner_mut().use_inner_iterations(value);
+        self
+    }
+
+    #[inline]
+    pub fn set_inner_iteration_tolerance(mut self, tolerance: f64) -> Self {
+        self.inner_mut().set_inner_iteration_tolerance(tolerance);
+        self
+    }
+
+    #[inline]
     pub fn preconditioner_type(mut self, preconditioner_type: PreconditionerType) -> Self {
         self.inner_mut()
             .set_preconditioner_type(preconditioner_type);
