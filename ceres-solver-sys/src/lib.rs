@@ -344,6 +344,8 @@ pub mod ffi {
             self: Pin<&mut SolverOptions>,
             linear_solver_type: LinearSolverType,
         );
+        fn use_inner_iterations(self: Pin<&mut SolverOptions>, value: bool);
+        fn set_inner_iteration_tolerance(self: Pin<&mut SolverOptions>, tolerance: f64);
         fn set_preconditioner_type(
             self: Pin<&mut SolverOptions>,
             preconditioner_type: PreconditionerType,
