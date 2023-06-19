@@ -340,6 +340,14 @@ impl<'cost> NllsProblem<'cost> {
         unsafe { Ok(self.inner().IsParameterBlockConstant(block_pointer)) }
     }
 
+    pub fn parameters(&self) -> Vec<&[f64]> {
+        self.parameter_storage
+            .blocks()
+            .iter()
+            .map(|x| x.values())
+            .collect()
+    }
+
     /// Solve the problem.
     pub fn solve(
         mut self,
