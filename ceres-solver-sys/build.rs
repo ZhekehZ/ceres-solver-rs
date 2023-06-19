@@ -5,10 +5,10 @@ fn main() {
 
     let mut cc_build = cxx_build::bridge("src/lib.rs");
     cc_build.file("src/lib.cpp");
-    
+
     #[cfg(all(feature = "source", feature = "custom"))]
     compile_error!("Features 'source' and 'custom' are mutually exclusive.");
-    
+
     #[cfg(feature = "custom")]
     {
         if let Ok(flags) = std::env::var("CERES_RS_FLAGS") {

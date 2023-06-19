@@ -1,8 +1,5 @@
 //! Various helper types.
-use ceres_solver_sys::ffi::{
-    RustIterationSummary,
-    RustCallbackReturnType,
-};
+use ceres_solver_sys::ffi::{RustCallbackReturnType, RustIterationSummary};
 
 pub type IterationSummary = RustIterationSummary;
 pub type CallbackReturnType = RustCallbackReturnType;

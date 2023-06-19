@@ -3,19 +3,19 @@
 use crate::error::SolverOptionsBuildingError;
 use crate::residual_block::ResidualBlockId;
 
+use crate::types::{CallbackReturnType, IterationSummary};
 use ceres_solver_sys::cxx::{let_cxx_string, UniquePtr};
-use ceres_solver_sys::{ffi, RustIterationCallback};
 pub use ceres_solver_sys::ffi::{
     DenseLinearAlgebraLibraryType, DoglegType, DumpFormatType, LineSearchDirectionType,
     LineSearchInterpolationType, LineSearchType, LinearSolverType, LoggingType, MinimizerType,
     NonlinearConjugateGradientType, PreconditionerType, SparseLinearAlgebraLibraryType,
     TrustRegionStrategyType, VisibilityClusteringType,
 };
+use ceres_solver_sys::{ffi, RustIterationCallback};
 use std::borrow::Cow;
 use std::ffi::OsStr;
 use std::path::Path;
 use std::pin::Pin;
-use crate::types::{CallbackReturnType, IterationSummary};
 
 pub struct SolverOptions(pub(crate) UniquePtr<ffi::SolverOptions>);
 

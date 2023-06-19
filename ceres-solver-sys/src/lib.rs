@@ -151,8 +151,10 @@ pub mod ffi {
         unsafe fn evaluate(self: &RustLossFunction, sq_norm: f64, out: *mut f64);
 
         type RustIterationCallback<'cb>;
-        unsafe fn invoke<'cb>(self: &mut RustIterationCallback<'cb>,
-                              summ: RustIterationSummary) -> RustCallbackReturnType;
+        unsafe fn invoke<'cb>(
+            self: &mut RustIterationCallback<'cb>,
+            summ: RustIterationSummary,
+        ) -> RustCallbackReturnType;
     }
 
     unsafe extern "C++" {
@@ -390,8 +392,10 @@ pub mod ffi {
             gradient_check_numeric_derivative_relative_step_size: f64,
         );
         fn set_update_state_every_iteration(self: Pin<&mut SolverOptions>, yes: bool);
-        fn add_iteration_callback<'cb>(self: Pin<&mut SolverOptions>,
-                                       callback: Box<RustIterationCallback<'cb>>);
+        fn add_iteration_callback<'cb>(
+            self: Pin<&mut SolverOptions>,
+            callback: Box<RustIterationCallback<'cb>>,
+        );
 
         /// Create an instance wrapping Solver::Options.
         fn new_solver_options() -> UniquePtr<SolverOptions>;
@@ -459,18 +463,21 @@ impl From<Box<dyn Fn(f64, *mut f64)>> for RustLossFunction {
 }
 
 pub struct RustIterationCallback<'cb>(
-    pub Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>
+    pub Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>,
 );
 
-impl <'cb> RustIterationCallback<'cb> {
+impl<'cb> RustIterationCallback<'cb> {
     pub fn invoke(&mut self, summ: ffi::RustIterationSummary) -> ffi::RustCallbackReturnType {
         (self.0.as_mut())(summ)
     }
 }
 
-impl <'cb> From<Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>>
-for RustIterationCallback<'cb> {
-    fn from(value: Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>) -> Self {
+impl<'cb> From<Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>>
+    for RustIterationCallback<'cb>
+{
+    fn from(
+        value: Box<dyn FnMut(ffi::RustIterationSummary) -> ffi::RustCallbackReturnType + 'cb>,
+    ) -> Self {
         Self(value)
     }
 }
