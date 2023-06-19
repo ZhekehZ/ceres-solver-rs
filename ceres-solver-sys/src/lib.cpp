@@ -232,7 +232,11 @@ namespace ceres {
     }
     void SolverOptions::add_iteration_callback(rust::Box<RustIterationCallback> callback) {
         callbacks.push_back(CustomIterationCallback(std::move(callback)));
-        inner.callbacks.push_back(&callbacks.back());
+
+        inner.callbacks.resize(callbacks.size());
+        for (size_t cb_idx = 0; cb_idx < callbacks.len(); ++cb_idx) {
+            inner.callbacks[cb_idx] = &callbacks[cb_idx];
+        }
     }
     CustomIterationCallback::CustomIterationCallback(rust::Box<RustIterationCallback> inner):
         inner(std::move(inner)) {}
