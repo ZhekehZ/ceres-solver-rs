@@ -6,7 +6,7 @@ readme = "README.md"
 description = "Unsafe Rust bindings for the Ceres Solver"
 repository = "https://github.com/light-curve/ceres-solver-rs"
 license = "MIT OR Apache-2.0"
-rust-version = "1.57.0"
+rust-version = "1.60.0"
 
 [features]
 # v2.1 introduced some breaking changes
@@ -24,12 +24,12 @@ path = "../ceres-solver-src"
 optional = true
 
 [dependencies.cxx]
-version = "1,<1.0.87"  # 1.0.87 requires MSRV 1.60
+version = "1"
 features = ["c++17"]
 
 [build-dependencies]
 cmake = "0.1"
-cxx-build = "1,<1.0.87"  # 1.0.87 requires MSRV 1.60
+cxx-build = "1"
 pkg-config = {version = "0.3", optional = true}
 
 [dev-dependencies]
